@@ -1,3 +1,4 @@
+
 #pragma once
 #ifndef CHIPS_H
 #define CHIPS_H
@@ -5,20 +6,20 @@
 
 typedef struct Chips
 {
-    int balance;  // ¥i¥Î¾lÃB
-    int bet;      // ·í«e¤Uª`
+    int balance;  // ï¿½iï¿½Î¾lï¿½B
+    int bet;      // ï¿½ï¿½ï¿½eï¿½Uï¿½`
 } Chips;
 
-void chips_init(Chips* c, int starting_balance);  // ªì©l¤ÆÄw½X¨t²Î
-bool chips_can_bet(const Chips* c, int amount);  // ÀË¬d¬O§_¥i¤Uª`
-bool chips_place_bet(Chips* c, int amount);  // ¶i¦æ¤Uª`
-void chips_clear_bet(Chips* c);  // ²MªÅ¤Uª`
-void chips_return_bet(Chips* c);  // ¦¬¦^¤Uª`¨ì¾lÃB
-void chips_payout_win(Chips* c);  // Ä¹ªº¤ä¥I (1:1)
-void chips_payout_push(Chips* c);  // ¥­§½ªðÁÙ
-void chips_payout_blackjack(Chips* c);  // ¤G¤Q¤@ÂI¤ä¥I (3:2)
-void chips_payout_lose(Chips* c);  // ¿éªº³B²z
-int chips_get_balance(const Chips* c);  // Àò¨ú¾lÃB
-int chips_get_bet(const Chips* c);  // Àò¨ú¤Uª`ª÷ÃB
+void chips_init(Chips* c, int starting_balance);  // ï¿½ï¿½lï¿½ï¿½ï¿½wï¿½Xï¿½tï¿½ï¿½
+bool chips_can_bet(const Chips* c, int amount);  // ï¿½Ë¬dï¿½Oï¿½_ï¿½iï¿½Uï¿½`
+bool chips_place_bet(Chips* c, int amount);  // ï¿½iï¿½ï¿½Uï¿½`
+void chips_clear_bet(Chips* c);  // ï¿½Mï¿½Å¤Uï¿½`
+void chips_return_bet(Chips* c);  // ï¿½ï¿½ï¿½^ï¿½Uï¿½`ï¿½ï¿½lï¿½B
+void chips_payout_win(Chips* c);  // Ä¹ï¿½ï¿½ï¿½ï¿½I (1:1)
+void chips_payout_push(Chips* c);  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+void chips_payout_blackjack(Chips* c);  // ï¿½Gï¿½Qï¿½@ï¿½Iï¿½ï¿½I (3:2)
+void chips_payout_lose(Chips* c);  // ï¿½éªºï¿½Bï¿½z
+int chips_get_balance(const Chips* c);  // ï¿½ï¿½ï¿½ï¿½lï¿½B
+int chips_get_bet(const Chips* c);  // ï¿½ï¿½ï¿½ï¿½Uï¿½`ï¿½ï¿½ï¿½B
 
 #endif

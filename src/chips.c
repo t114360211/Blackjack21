@@ -1,8 +1,9 @@
+
 #include "chips.h"
 
 void chips_init(Chips* c, int starting_balance)
 {
-    if (starting_balance < 0) {  // ¨¾¤î­t¼Æ°_©l¾lÃB
+    if (starting_balance < 0) {  // ï¿½ï¿½ï¿½ï¿½tï¿½Æ°_ï¿½lï¿½lï¿½B
         starting_balance = 0;
     }
     c->balance = starting_balance;
@@ -11,59 +12,59 @@ void chips_init(Chips* c, int starting_balance)
 
 bool chips_can_bet(const Chips* c, int amount)
 {
-    if (amount <= 0) return false;  // ª÷ÃB¥²¶·¬°¥¿
-    return c->balance >= amount;  // ¾lÃB¥²¶·¨¬°÷
+    if (amount <= 0) return false;  // ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    return c->balance >= amount;  // ï¿½lï¿½Bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 }
 
 bool chips_place_bet(Chips* c, int amount)
 {
-    if (!chips_can_bet(c, amount)) return false;  // ÀË¬d¬O§_¥i¤Uª`
-    c->balance -= amount;  // ±q¾lÃB¦©°£
-    c->bet += amount;  // ¥[¨ì¤Uª`
+    if (!chips_can_bet(c, amount)) return false;  // ï¿½Ë¬dï¿½Oï¿½_ï¿½iï¿½Uï¿½`
+    c->balance -= amount;  // ï¿½qï¿½lï¿½Bï¿½ï¿½ï¿½ï¿½
+    c->bet += amount;  // ï¿½[ï¿½ï¿½Uï¿½`
     return true;
 }
 
 void chips_clear_bet(Chips* c)
 {
-    c->bet = 0;  // ²MªÅ¤Uª`(¤£°hÁÙ)
+    c->bet = 0;  // ï¿½Mï¿½Å¤Uï¿½`(ï¿½ï¿½ï¿½hï¿½ï¿½)
 }
 
 void chips_return_bet(Chips* c)
 {
-    c->balance += c->bet;  // °hÁÙ¤Uª`¨ì¾lÃB
-    c->bet = 0;  // ²MªÅ¤Uª`
+    c->balance += c->bet;  // ï¿½hï¿½Ù¤Uï¿½`ï¿½ï¿½lï¿½B
+    c->bet = 0;  // ï¿½Mï¿½Å¤Uï¿½`
 }
 
 void chips_payout_win(Chips* c)
 {
-    c->balance += c->bet * 2;  // ¤ä¥I2­¿(¥»ª÷+Àò§Q)
+    c->balance += c->bet * 2;  // ï¿½ï¿½I2ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½+ï¿½ï¿½Q)
     chips_clear_bet(c);
 }
 
 void chips_payout_push(Chips* c)
 {
-    c->balance += c->bet;  // ªðÁÙ¥»ª÷
+    c->balance += c->bet;  // ï¿½ï¿½ï¿½Ù¥ï¿½ï¿½ï¿½
     chips_clear_bet(c);
 }
 
 void chips_payout_blackjack(Chips* c)
 {
-    int payout = (c->bet * 5) / 2;  // ­pºâ2.5­¿¤ä¥I
+    int payout = (c->bet * 5) / 2;  // ï¿½pï¿½ï¿½2.5ï¿½ï¿½ï¿½ï¿½I
     c->balance += payout;
     chips_clear_bet(c);
 }
 
 void chips_payout_lose(Chips* c)
 {
-    chips_clear_bet(c);  // ¥u²MªÅ¤Uª`(¤w¦©°£)
+    chips_clear_bet(c);  // ï¿½uï¿½Mï¿½Å¤Uï¿½`(ï¿½wï¿½ï¿½ï¿½ï¿½)
 }
 
 int chips_get_balance(const Chips* c)
 {
-    return c->balance;  // ªð¦^·í«e¾lÃB
+    return c->balance;  // ï¿½ï¿½^ï¿½ï¿½ï¿½eï¿½lï¿½B
 }
 
 int chips_get_bet(const Chips* c)
 {
-    return c->bet;  // ªð¦^·í«e¤Uª`
+    return c->bet;  // ï¿½ï¿½^ï¿½ï¿½ï¿½eï¿½Uï¿½`
 }
