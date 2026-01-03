@@ -131,7 +131,7 @@ void game_new_round(Game* g)
     g->player_stand = false;
 }
 
-// 發初始牌
+// 發初始牌（包含黑傑克判定）
 void game_place_initial_cards(Game* g)
 {
     hand_clear(&g->player);
@@ -146,7 +146,7 @@ void game_place_initial_cards(Game* g)
     g->outcome = OUTCOME_NONE;
     g->player_stand = false;
 
-    // 初始判定
+    // 初始黑傑克判定
     if (game_is_blackjack(&g->player) && game_is_blackjack(&g->dealer))
     {
         g->outcome = OUTCOME_PUSH;
@@ -164,31 +164,24 @@ void game_place_initial_cards(Game* g)
     }
 }
 
-// 【修正重點】優化要牌邏輯：處理爆牌、過五關、以及自動停止於 21 點
+// 【修正重點】玩家要牌，加入過五關判定
 void game_player_hit(Game* g)
 {
     if (g->state != ROUND_PLAYER_TURN) return;
 
     hand_add(&g->player, deck_draw(g));
 
-    int current_val = game_hand_value(&g->player);
-
-    // 1. 檢查是否爆牌
-    if (current_val > 21)
+    // 先判斷是否爆牌
+    if (game_is_bust(&g->player))
     {
         g->outcome = OUTCOME_PLAYER_BUST;
         g->state = ROUND_RESULT;
     }
-    // 2. 檢查是否過五關 (五張牌且未爆牌)
+    // 再判斷是否達成「過五關」 (五張牌且未爆牌)
     else if (g->player.count == 5)
     {
-        g->outcome = OUTCOME_PLAYER_WIN;
+        g->outcome = OUTCOME_PLAYER_WIN; // 過五關視為玩家直接勝利
         g->state = ROUND_RESULT;
-    }
-    // 3. 檢查是否剛好 21 點 (自動停牌進入莊家回合)
-    else if (current_val == 21)
-    {
-        game_player_stand(g);
     }
 }
 
@@ -198,19 +191,24 @@ void game_player_stand(Game* g)
     if (g->state != ROUND_PLAYER_TURN) return;
     g->player_stand = true;
     g->state = ROUND_DEALER_TURN;
+
+    // 注意：在許多實作中，stand 後應立即呼叫 game_dealer_play
+    // 如果你在 main 迴圈沒有自動呼叫，可以在這裡補上：
+    // game_dealer_play(g); 
 }
 
-// 莊家回合邏輯
+// 【修正重點】莊家回合，確保流程不卡死並切換到 RESULT
 void game_dealer_play(Game* g)
 {
+    // 確保只有在莊家回合時執行
     if (g->state != ROUND_DEALER_TURN) return;
 
-    // 莊家補牌：小於 17 必須補
+    // 莊家補牌邏輯：小於 17 必須補牌
     while (game_hand_value(&g->dealer) < 17)
     {
         hand_add(&g->dealer, deck_draw(g));
 
-        // 莊家過五關判定
+        // 如果莊家也補到五張且沒爆，則停止（莊家過五關邏輯）
         if (g->dealer.count == 5 && game_hand_value(&g->dealer) <= 21)
             break;
     }
@@ -230,5 +228,6 @@ void game_dealer_play(Game* g)
         else g->outcome = OUTCOME_PUSH;
     }
 
+    // 重點：一定要切換到結果狀態，否則主程式會一直停在 DEALER_TURN
     g->state = ROUND_RESULT;
 }
